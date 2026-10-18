@@ -6,7 +6,7 @@ spring:
     name: newtonite-ops-test
 
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/newtonite_ops}
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/newtonite_ops}
     username: ${DB_USERNAME:newtonite}
     password: ${DB_PASSWORD:newtonite}
     driver-class-name: org.postgresql.Driver
