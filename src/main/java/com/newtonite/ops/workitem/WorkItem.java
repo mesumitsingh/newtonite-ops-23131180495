@@ -72,7 +72,6 @@ public class WorkItem {
         this.assignee = assignee;
         this.createdBy = createdBy;
         this.dueDate = dueDate;
-        this.version = 0L;
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }
@@ -87,9 +86,6 @@ public class WorkItem {
         }
         if (this.updatedAt == null) {
             this.updatedAt = Instant.now();
-        }
-        if (this.version == null) {
-            this.version = 0L;
         }
     }
 
@@ -179,7 +175,7 @@ public class WorkItem {
     }
 
     public Long getVersion() {
-        return version;
+        return version != null ? version : 0L;
     }
 
     public void setVersion(Long version) {

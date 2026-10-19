@@ -99,7 +99,16 @@ public class AuthorizationIntegrationTest extends BaseIntegrationTest {
         Team coreInfra = teamRepository.findByName("Core Infrastructure").orElseThrow();
         WorkItem itemAwaiting = workItemRepository.findAll().stream()
                 .filter(w -> w.getTeam().getId().equals(coreInfra.getId()) && w.getStatus() == WorkItemStatus.AWAITING_APPROVAL)
-                .findFirst().orElseThrow();
+                .findFirst()
+                .orElseGet(() -> {
+                    com.newtonite.ops.user.User alice = userRepository.findByUsername("admin_alice").orElseThrow();
+                    WorkItem fresh = new WorkItem(
+                            UUID.randomUUID(), "Member Approval Test Target", "Desc",
+                            WorkItemType.TASK, WorkItemPriority.MEDIUM, WorkItemStatus.AWAITING_APPROVAL,
+                            coreInfra, null, alice, null
+                    );
+                    return workItemRepository.saveAndFlush(fresh);
+                });
 
         // Charlie is MEMBER in Core Infrastructure
         String charlieToken = getBearerTokenForUser("member_charlie");
@@ -123,7 +132,16 @@ public class AuthorizationIntegrationTest extends BaseIntegrationTest {
         Team coreInfra = teamRepository.findByName("Core Infrastructure").orElseThrow();
         WorkItem itemAwaiting = workItemRepository.findAll().stream()
                 .filter(w -> w.getTeam().getId().equals(coreInfra.getId()) && w.getStatus() == WorkItemStatus.AWAITING_APPROVAL)
-                .findFirst().orElseThrow();
+                .findFirst()
+                .orElseGet(() -> {
+                    com.newtonite.ops.user.User alice = userRepository.findByUsername("admin_alice").orElseThrow();
+                    WorkItem fresh = new WorkItem(
+                            UUID.randomUUID(), "Lead Approval Target", "Desc",
+                            WorkItemType.TASK, WorkItemPriority.MEDIUM, WorkItemStatus.AWAITING_APPROVAL,
+                            coreInfra, null, alice, null
+                    );
+                    return workItemRepository.saveAndFlush(fresh);
+                });
 
         // Bob is LEAD in Core Infrastructure
         String bobToken = getBearerTokenForUser("lead_bob");

@@ -107,7 +107,7 @@ public class WorkItemService {
                 request.getDueDate()
         );
 
-        WorkItem saved = workItemRepository.save(item);
+        WorkItem saved = workItemRepository.saveAndFlush(item);
 
         // Transactional Activity History
         activityEventService.recordEvent(
@@ -245,7 +245,7 @@ public class WorkItemService {
                     null,
                     "Updated item details"
             );
-            item = workItemRepository.save(item);
+            item = workItemRepository.saveAndFlush(item);
         }
 
         return enrichResponse(item, currentUser);
@@ -354,7 +354,7 @@ public class WorkItemService {
             );
         }
 
-        WorkItem saved = workItemRepository.save(item);
+        WorkItem saved = workItemRepository.saveAndFlush(item);
         return enrichResponse(saved, currentUser);
     }
 
@@ -376,7 +376,7 @@ public class WorkItemService {
         workflowService.validateTransition(oldStatus, request.getTargetStatus(), userRole);
 
         item.setStatus(request.getTargetStatus());
-        WorkItem saved = workItemRepository.save(item);
+        WorkItem saved = workItemRepository.saveAndFlush(item);
 
         activityEventService.recordEvent(
                 item.getId(),
